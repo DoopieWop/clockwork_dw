@@ -1,4 +1,4 @@
-print("Please wait while Clockwork initializes...")
+MsgC(Color(0, 0, 255), "[Clockwork] Loading CAX patch...\n")
 
 CloudAuthX = CWUtil;
 CloudAuthX.kernel = {};
