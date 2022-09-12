@@ -41,7 +41,6 @@ local stored = {};
 local modules = {};
 local unloaded = {};
 local extras = {};
-local hookCache = {};
 
 --[[
 	@codebase Shared
@@ -77,15 +76,6 @@ end;
 --]]
 function Clockwork.plugin:GetExtras()
 	return extras;
-end;
-
---[[
-	@codebase Shared
-	@details A function to get the local plugin hook cache.
-	@returns {Table} The local plugin hook cache table.
---]]
-function Clockwork.plugin:GetHookCache()
-	return hookCache;
 end;
 
 PLUGIN_META = {__index = PLUGIN_META};
@@ -400,13 +390,13 @@ function Clockwork.plugin:Register(pluginTable)
 		end;
 	end;
 
-	self:IncludePlugins(newBaseDir);
+    for k, v in pairs(pluginTable) do
+        if type(v) == "function" then
+            hook.Add(k, pluginTable, v);
+        end;
+    end;
 
-	if (self.ClearHookCache) then
-		self:ClearHookCache();
-		self.sortedModules = nil;
-		self.sortedPlugins = nil;
-	end;
+	self:IncludePlugins(newBaseDir);
 end;
 
 --[[
@@ -569,6 +559,7 @@ function Clockwork.plugin:New()
 	local pluginTable = Clockwork.kernel:NewMetaTable(PLUGIN_META);
 	pluginTable.baseDir = PLUGIN_BASE_DIR;
 	pluginTable.folderName = PLUGIN_FOLDERNAME;
+    pluginTable.IsValid = function() return true end
 	
 	return pluginTable;
 end;
@@ -595,91 +586,13 @@ end;
 
 --[[
 	@codebase Shared
-	@details A function to clear the hook cache for all hooks or a specific one.
-	@param {Unknown} Missing description for name.
-	@returns {Unknown}
---]]
-function Clockwork.plugin:ClearHookCache(name)
-	if (!name) then
-		hookCache = {};
-	elseif (hookCache[name]) then
-		hookCache[name] = nil;
-	else
-	    MsgC(Color(255, 100, 0, 255), "[Clockwork:Plugin] Attempted to clear cache for invalid hook '"..name.."'");
-	end;
-end;
-
---[[
-	@codebase Shared
-	@details A function to run the plugin hooks.
-	@param {Unknown} Missing description for name.
-	@param {Unknown} Missing description for isGamemode.
-	@param {Unknown} Missing description for ....
-	@returns {Unknown}
---]]
-function Clockwork.plugin:RunHooks(name, isGamemode, ...)
-	if (not self.sortedModules) then
-		self.sortedModules = self:SortList(modules);
-	end;
-	
-	if (not self.sortedPlugins) then
-		self.sortedPlugins = self:SortList(stored);
-	end;
-
-	local cache = hookCache[name];
-	
-	if (not cache) then
-		cache = {};
-		
-		for k, v in ipairs(self.sortedModules) do
-			if (modules[v.name] and v[name]) then
-				table.insert(cache, {v[name], v});
-			end;
-		end;
-
-		for k, v in ipairs(self.sortedPlugins) do
-			if (stored[v.name] and Schema != v and v[name]) then
-				table.insert(cache, {v[name], v});
-			end;
-		end;
-
-		if (Schema and Schema[name]) then
-			table.insert(cache, {Schema[name], Schema});
-		end;
-
-		hookCache[name] = cache;
-	end;
-
-	for k, v in ipairs(cache) do
-		local wasSuccess, value = pcall(v[1], v[2], ...);
-			
-		if (!wasSuccess) then
-			MsgC(Color(255, 100, 0, 255), "\n[Clockwork:"..v[2].name.."]\nThe '"..name.."' hook has failed to run.\n"..value.."\n");
-		elseif (value != nil) then
-			return value;
-		end;
-	end;
-
-	if (isGamemode and Clockwork[name]) then
-		local wasSuccess, value = pcall(Clockwork[name], Clockwork, ...);
-		
-		if (!wasSuccess) then
-			MsgC(Color(255, 100, 0, 255), "\n[Clockwork:Kernel]\nThe '"..name.."' Clockwork hook has failed to run.\n"..value.."\n");
-		elseif (value != nil) then
-			return value;
-		end;
-	end;
-end;
-
---[[
-	@codebase Shared
 	@details A function to call a function for all plugins.
 	@param {Unknown} Missing description for name.
 	@param {Unknown} Missing description for ....
 	@returns {Unknown}
 --]]
 function Clockwork.plugin:Call(name, ...)
-	return self:RunHooks(name, true, ...);
+    return hook.Call(name, Clockwork, ...);
 end;
 
 --[[
@@ -708,12 +621,6 @@ function Clockwork.plugin:Add(name, moduleTable, hookOrder)
 	moduleTable.hookOrder = hookOrder or 0;
 	
 	modules[name] = moduleTable;
-
-	if (self.ClearHookCache) then
-		self:ClearHookCache();
-		self.sortedModules = nil;
-		self.sortedPlugins = nil;
-	end;
 end;
 
 --[[

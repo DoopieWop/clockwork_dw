@@ -105,16 +105,7 @@ if (system.IsLinux()) then
 	end;
 end;
 
---[[
-	This is a hack to allow us to call plugin hooks based
-	on default GMod hooks that are called.
-
-	It modifies the hook.Call funtion to call hooks inside Clockwork plugins
-	as well as hooks that are added normally with hook.Add.
---]]
-hook.ClockworkCall = hook.ClockworkCall or hook.Call;
-hook.Timings = hook.Timings or {};
-hook.Averages = hook.Averages or {};
+local oldcall = hook.Call;
 
 function hook.Call(name, gamemode, ...)
 	if (name == "EntityTakeDamage") then
@@ -129,27 +120,7 @@ function hook.Call(name, gamemode, ...)
 		end;
 	end;
 
-	local status, value = xpcall(cwPlugin.RunHooks, debug.traceback, cwPlugin, name, nil, ...);
-
-	if (!status) then
-		if (!Clockwork.Unauthorized) then
-			MsgC(Color(255, 100, 0, 255), "\n[Clockwork:Kernel]\nThe '"..name.."' hook has failed to run.\n"..value.."\n");
-		end;
-	end;
-
-	if (value == nil or name == THINK_NAME) then
-		local status, a, b, c = xpcall(hook.ClockworkCall, debug.traceback, name, gamemode or Clockwork, ...);
-
-		if (!status) then
-			if (!Clockwork.Unauthorized) then
-				MsgC(Color(255, 100, 0, 255), "\n[Clockwork:Kernel]\nThe '"..name.."' hook failed to run.\n"..a.."\n");
-			end;
-		else
-			return a, b, c;
-		end;
-	else
-		return value;
-	end;
+    return oldcall(name, gamemode, ...);
 end;
 
 --[[
@@ -235,7 +206,6 @@ function Clockwork:Initialize()
 
 	cwPlugin:Call("ClockworkInitialized");
 	cwPlugin:CheckMismatches();
-	cwPlugin:ClearHookCache();
 
 	hook.Remove("PlayerTick", "TickWidgets")
 
@@ -5991,5 +5961,3 @@ function playerMeta:SetData(key, value)
 		end;
 	end;
 end;
-
-MsgN("[Clockwork] The sv_kernel.lua externals have been loaded successfully.");

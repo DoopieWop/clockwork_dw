@@ -77,6 +77,7 @@ local cwQuiz = Clockwork.quiz;
 local cwItem = Clockwork.item;
 local cwLimb = Clockwork.limb;
 local cwClient;
+Clockwork.Client = IsValid(Clockwork.Client) and Clockwork.Client or nil;
 
 --[[
 	Derive from Sandbox, because we want the spawn menu and such!
@@ -84,36 +85,13 @@ local cwClient;
 --]]
 DeriveGamemode("sandbox");
 
---[[
-	This is a hack to allow us to call plugin hooks based
-	on default GMod hooks that are called.
---]]
-hook.ClockworkCall = hook.ClockworkCall or hook.Call;
-hook.Timings = hook.Timings or {};
-
+local oldcall = hook.Call;
 function hook.Call(name, gamemode, ...)
-	if (!IsValid(Clockwork.Client)) then
+    if (!IsValid(Clockwork.Client)) then
 		Clockwork.Client = LocalPlayer();
 		cwClient = Clockwork.Client;
 	end;
-	
-	local status, value = xpcall(cwPlugin.RunHooks, debug.traceback, cwPlugin, name, nil, ...);
-	
-	if (!status) then
-		MsgC(Color(255, 100, 0, 255), "[Clockwork] The '"..name.."' hook failed to run.\n"..value.."\n"..value.."\n");
-	end;
-	
-	if (value == nil) then
-		local status, a, b, c = xpcall(hook.ClockworkCall, debug.traceback, name, gamemode or Clockwork, ...);
-		
-		if (!status) then
-			MsgC(Color(255, 100, 0, 255), "[Clockwork] The '"..name.."' hook failed to run.\n"..a.."\n");
-		else
-			return a, b, c;
-		end;
-	else
-		return value;
-	end;
+    return oldcall(name, gamemode, ...);
 end;
 
 --[[
@@ -902,7 +880,6 @@ function Clockwork:Initialize()
 	cwTheme:Initialize();
 	
 	cwPlugin:CheckMismatches();
-	cwPlugin:ClearHookCache();
 
 	cwSetting:AddSettings();
 	
@@ -928,20 +905,20 @@ end;
 function Clockwork:ClockworkInitialized()
 	local logoFile = "clockwork/logo/002.png";
 
-	self.SpawnIconMaterial = cwKernel:GetMaterial("vgui/spawnmenu/hover");
-	self.DefaultGradient = surface.GetTextureID("gui/gradient_down");
-	self.GradientTexture = cwKernel:GetMaterial(cwOption:GetKey("gradient")..".png");
-	self.ClockworkSplash = cwKernel:GetMaterial(logoFile);
-	self.FishEyeTexture = cwKernel:GetMaterial("models/props_c17/fisheyelens");
-	self.GradientCenter = surface.GetTextureID("gui/center_gradient");
-	self.GradientRight = surface.GetTextureID("gui/gradient");
-	self.GradientUp = surface.GetTextureID("gui/gradient_up");
-	self.ScreenBlur = cwKernel:GetMaterial("pp/blurscreen");
-	self.Gradients = {
-		[GRADIENT_CENTER] = self.GradientCenter;
-		[GRADIENT_RIGHT] = self.GradientRight;
-		[GRADIENT_DOWN] = self.DefaultGradient;
-		[GRADIENT_UP] = self.GradientUp;
+	Clockwork.SpawnIconMaterial = cwKernel:GetMaterial("vgui/spawnmenu/hover");
+	Clockwork.DefaultGradient = surface.GetTextureID("gui/gradient_down");
+	Clockwork.GradientTexture = cwKernel:GetMaterial(cwOption:GetKey("gradient")..".png");
+	Clockwork.ClockworkSplash = cwKernel:GetMaterial(logoFile);
+	Clockwork.FishEyeTexture = cwKernel:GetMaterial("models/props_c17/fisheyelens");
+	Clockwork.GradientCenter = surface.GetTextureID("gui/center_gradient");
+	Clockwork.GradientRight = surface.GetTextureID("gui/gradient");
+	Clockwork.GradientUp = surface.GetTextureID("gui/gradient_up");
+	Clockwork.ScreenBlur = cwKernel:GetMaterial("pp/blurscreen");
+	Clockwork.Gradients = {
+		[GRADIENT_CENTER] = Clockwork.GradientCenter;
+		[GRADIENT_RIGHT] = Clockwork.GradientRight;
+		[GRADIENT_DOWN] = Clockwork.DefaultGradient;
+		[GRADIENT_UP] = Clockwork.GradientUp;
 	};
 
 	cwSetting:AddSettings();
