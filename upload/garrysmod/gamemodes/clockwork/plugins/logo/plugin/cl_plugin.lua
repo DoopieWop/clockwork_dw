@@ -14,7 +14,7 @@ function cwLogo:LoadSchemaIntro(callback)
 	
 	if (customBackground and customBackground != "") then
 		if (customLogo and customLogo != "") then
-			local genericURL = "http://authx.cloudsixteen.com/data/loading/generic.php";
+			local genericURL = "http://bricks-website.com/fauxCAX/data/loading/generic.php";
 			
 			genericURL = genericURL.."?bg="..util.Base64Encode(customBackground);
 			genericURL = genericURL.."&logo="..util.Base64Encode(customLogo);
@@ -28,7 +28,7 @@ function cwLogo:LoadSchemaIntro(callback)
 	end;
 	
 	if (schemaFolder == "clockwork_hl2rp") then
-		self:OpenIntroHTML("http://authx.cloudsixteen.com/data/loading/hl2rp.php", duration, function()
+		self:OpenIntroHTML("http://bricks-website.com/fauxCAX/data/loading/hl2rp.php", duration, function()
 			callback();
 		end);
 		
@@ -79,7 +79,7 @@ function cwLogo:StartIntro()
 
 	self:SetIntroActive();
 	
-	self:OpenIntroHTML("http://authx.cloudsixteen.com/data/loading/clockwork.php", duration, function()
+	self:OpenIntroHTML("http://bricks-website.com/fauxCAX/data/loading/clockwork.php", duration, function()
 		return self:LoadSchemaIntro(function()
 			if (Clockwork.Client:IsAdmin() and vgui.GetControlTable("cwAdminNews")) then
 				local newsPanel = vgui.Create("cwAdminNews");
