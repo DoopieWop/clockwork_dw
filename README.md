@@ -1,18 +1,14 @@
+# Clockwork DW
+
+Since 2021 March, Clockwork isn't being maintained anymore. As a fellow Clockwork enjoyer, I've decided to grab a copy of Clockwork and fix some of the issues I have with it, like the terrible hook system which results in very crappy error logs as well as the lack of auto-refresh. This project will always be a "use at your own risk" kind of thing, since I can't guarantee that all the things I do in this gamemode will work (owed due to the like 20k+ lines of code in this monster).
+
+All previous contributors to Clockwork are below.
+
 ## Clockwork
 [![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg)](#contributors)
-[![Latest Release](https://img.shields.io/github/release/cloudsixteen/clockwork.svg)](https://github.com/CloudSixteen/Clockwork/releases/latest)
-[![Discord](https://img.shields.io/discord/126667779095920640.svg)](https://discord.gg/EEg47Dw)
-[![Open Collective sponsors](https://img.shields.io/opencollective/sponsors/cloudsixteen.svg)](https://opencollective.com/cloudsixteen)
-[![GitHub issues](https://img.shields.io/github/issues-raw/cloudsixteen/clockwork.svg)](https://github.com/cloudsixteen/clockwork/issues)
   
-A roleplaying framework developed by Cloud Sixteen for the people.  
+A roleplaying framework developed by Cloud Sixteen and continued by the people for the people.  
 *Clockwork was created by Conna Wiles, also known as kurozael.*
-
-## Documentation
-[Cloud Sixteen Wiki](https://wiki.cloudsixteen.com)
-
-## Donations
-[Donate to Cloud Sixteen](https://paypal.me/kurozael)
 
 ## Contributors
 

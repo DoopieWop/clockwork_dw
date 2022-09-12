@@ -2,6 +2,11 @@
 
 > The following changes have been made for each official Clockwork build.
 
+### 0.102
+* Replaced hook system with GLua's hook system (very experimental)
+* Temporary fix for intro plugin
+* Removed C16 forum plugins
+
 ### 0.101
 
 * Added support for the Turkish language (thanks polo-roleplay!)
