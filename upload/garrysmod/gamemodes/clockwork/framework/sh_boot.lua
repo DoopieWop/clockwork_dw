@@ -28,7 +28,7 @@ end;
 
 Clockwork.ClockworkFolder = Clockwork.ClockworkFolder or GM.Folder;
 Clockwork.SchemaFolder = Clockwork.SchemaFolder or engine.ActiveGamemode();
-Clockwork.KernelVersion = "1.0.0";
+Clockwork.KernelVersion = "0.102";
 Clockwork.DeveloperVersion = true;
 Clockwork.Website = "http://kurozael.com";
 Clockwork.Author = "kurozael";
@@ -70,6 +70,7 @@ Clockwork.kernel:IncludePlugins("plugins/", true);
 Clockwork.kernel:IncludeDirectory("system/", true);
 Clockwork.kernel:IncludeDirectory("items/", true);
 Clockwork.kernel:IncludeDirectory("derma/", true);
+Clockwork.kernel:IncludeDirectory("commands/", true);
 
 --[[ The following code is loaded over-the-Cloud. --]]
 if (SERVER and Clockwork.LoadPreSchemaExternals) then
@@ -84,8 +85,6 @@ if (SERVER) then
 	MsgC(Color(0, 255, 100, 255), "[Clockwork] Successfully loaded "..Schema:GetName().." version "..Clockwork.kernel:GetSchemaGamemodeVersion().." by "..Schema:GetAuthor()..".\n");
 end;
 
-Clockwork.kernel:IncludeDirectory("commands/", true);
-
 Clockwork.player:AddCharacterData("PhysDesc", NWTYPE_STRING, "");
 Clockwork.player:AddCharacterData("Model", NWTYPE_STRING, "");
 Clockwork.player:AddCharacterData("Flags", NWTYPE_STRING, "");
@@ -96,6 +95,8 @@ Clockwork.player:AddCharacterData("Key", NWTYPE_NUMBER, 0);
 
 -- Called when the Clockwork shared variables are added.
 function Clockwork:ClockworkAddSharedVars(globalVars, playerVars)
+    MsgC(Color(0, 0, 255), "[Clockwork] Adding shared variables...\n");
+
 	for k, v in pairs(self.player.characterData) do
 		playerVars:Add(k, v.nwType, v.playerOnly);
 	end;
@@ -103,7 +104,7 @@ function Clockwork:ClockworkAddSharedVars(globalVars, playerVars)
 	for k, v in pairs(self.player.playerData) do
 		playerVars:Add(k, v.nwType, v.playerOnly);
 	end;
-	
+
 	playerVars:Number("InvWeight", true);
 	playerVars:Number("InvSpace", true);
 	playerVars:Number("MaxHP");
@@ -136,8 +137,8 @@ function Clockwork:ClockworkAddSharedVars(globalVars, playerVars)
 end;
 
 Clockwork.plugin:Call("ClockworkAddSharedVars",
-	Clockwork.kernel:GetSharedVars():Global(true),
-	Clockwork.kernel:GetSharedVars():Player(true)
+    Clockwork.kernel:GetSharedVars():Global(true),
+    Clockwork.kernel:GetSharedVars():Player(true)
 );
 
 Clockwork.plugin:IncludeEffects("Clockwork/framework");
