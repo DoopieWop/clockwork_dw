@@ -22,7 +22,7 @@ local type = type;
 Clockwork.crafting = Clockwork.kernel:NewLibrary("Crafting");
 Clockwork.crafting.buffer = {};
 Clockwork.crafting.stored = {};
-Clockwork.crafting.version = "1.0.0";
+Clockwork.crafting.version = "0.102";
 
 --[[ Set the __index meta function of the class. --]]
 local CLASS_TABLE = {__index = CLASS_TABLE};
