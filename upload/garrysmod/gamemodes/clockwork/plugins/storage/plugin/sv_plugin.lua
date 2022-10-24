@@ -6,6 +6,8 @@
 	http://cloudsixteen.com/license/clockwork.html
 --]]
 
+cwStorage.storage = cwStorage.storage or {};
+
 Clockwork.datastream:Hook("ContainerPassword", function(player, data)
 	local password = data[1];
 	local entity = data[2];
@@ -111,9 +113,7 @@ end;
 -- A function to load the storage.
 function cwStorage:LoadStorage()
 	local storage = Clockwork.kernel:RestoreSchemaData("plugins/storage/"..game.GetMap());
-	
-	self.storage = {};
-	
+		
 	for k, v in pairs(storage) do
 		if (!v.model) then
 			local entity = ents.FindInSphere((v.startPos or v.position), 16)[1];

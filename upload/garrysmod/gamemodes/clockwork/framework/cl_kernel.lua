@@ -76,8 +76,9 @@ local cwMenu = Clockwork.menu;
 local cwQuiz = Clockwork.quiz;
 local cwItem = Clockwork.item;
 local cwLimb = Clockwork.limb;
-local cwClient;
-Clockwork.Client = IsValid(Clockwork.Client) and Clockwork.Client or nil;
+
+Clockwork.Client = IsValid(Clockwork.Client) and Clockwork.Client;
+local cwClient = Clockwork.Client;
 
 --[[
 	Derive from Sandbox, because we want the spawn menu and such!

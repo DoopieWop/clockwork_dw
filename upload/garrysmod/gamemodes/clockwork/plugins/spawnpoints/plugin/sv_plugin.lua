@@ -6,11 +6,12 @@
 	http://cloudsixteen.com/license/clockwork.html
 --]]
 
+cwSpawnPoints.spawnPoints = cwSpawnPoints.spawnPoints or {};
+
 -- A function to load the player spawn points.
 function cwSpawnPoints:LoadSpawnPoints()
 	local spawnPoints = Clockwork.kernel:RestoreSchemaData("plugins/spawnpoints/"..game.GetMap());
-	self.spawnPoints = {};
-	
+    
 	for k, v in pairs(spawnPoints) do
 		local faction = Clockwork.faction:FindByID(k);
 		local class = Clockwork.class:FindByID(k);

@@ -24,7 +24,7 @@ local vgui = vgui;
 Clockwork.character = Clockwork.kernel:NewLibrary("Character");
 Clockwork.character.stored = Clockwork.character.stored or {};
 Clockwork.character.whitelisted = Clockwork.character.whitelisted or {};
-Clockwork.character.creationPanels = Clockwork.character.creationPanels or {};
+Clockwork.character.creationPanels = {};
 
 --[[
 	@codebase Client

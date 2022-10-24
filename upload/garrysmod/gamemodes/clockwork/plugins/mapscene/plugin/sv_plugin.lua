@@ -6,10 +6,11 @@
 	http://cloudsixteen.com/license/clockwork.html
 --]]
 
+cwMapScene.storedList = cwMapScene.storedList or {};
+
 -- A function to load the map scenes.
 function cwMapScene:LoadMapScenes()
 	local mapScenes = Clockwork.kernel:RestoreSchemaData("plugins/scenes/"..game.GetMap());
-	self.storedList = {};
 	
 	for k, v in pairs(mapScenes) do
 		self.storedList[#self.storedList + 1] = v;

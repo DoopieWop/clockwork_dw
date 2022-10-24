@@ -10,7 +10,7 @@ Clockwork.database = Clockwork.kernel:NewLibrary("Database");
 
 Clockwork.database.updateTable = nil;
 Clockwork.database.runQueue = {};
-Clockwork.database.liteSql = false;
+Clockwork.database.liteSql = Clockwork.database.liteSql or false;
 
 MYSQL_UPDATE_CLASS = {__index = MYSQL_UPDATE_CLASS};
 
